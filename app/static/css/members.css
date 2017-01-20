@@ -1,0 +1,49 @@
+.header_member {
+  position: relative;
+  width: 100%;
+  min-height: auto;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+  background-position: center;
+  background-image: url('../img/org_cover_photo.jpg');
+  text-align: center;
+  color: white;
+}
+
+#photobg{
+  font-size: 150%;
+  color:white;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  /*text-shadow: 0 0 2px #000;*/
+}
+
+/*Could probably consolidate these four sections, but that's what pull requests are for*/
+i.fa-facebook-official{
+  color:white;
+}
+a:hover i.fa-facebook-official{
+  color:#00b0f8;
+}
+
+i.fa-twitter{
+  color:white;
+}
+a:hover i.fa-twitter{
+  color:#00b0f8;
+}
+
+i.fa-github{
+  color:white;
+}
+a:hover i.fa-github{
+  color:#00b0f8;
+}
+
+i.fa-envelope{
+  color:white;
+}
+a:hover i.fa-envelope{
+  color:#00b0f8;
+}

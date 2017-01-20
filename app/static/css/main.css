@@ -1,0 +1,136 @@
+/* Custom Stylesheet */
+/**
+ * Use this file to override Materialize files so you can update
+ * the core Materialize files in the future
+ *
+ * Made By MaterializeCSS.com
+ */
+
+ nav ul a,
+ nav .brand-logo {
+  color: #444;
+}
+
+p {
+  line-height: 2rem;
+}
+
+.button-collapse {
+  color: #64b5f6;
+}
+
+.parallax-container {
+  min-height: 420px;
+  line-height: 0;
+  height: auto;
+  color: rgba(255,255,255,.9);
+}
+.parallax-container .section {
+  width: 100%;
+}
+
+#logo-container{
+  padding-top: .2em;
+}
+
+@media only screen and (max-width : 992px) {
+  .parallax-container .section {
+    position: absolute;
+    top: 40%;
+  }
+  #index-banner .section {
+    top: 5%;
+  }
+}
+
+@media only screen and (max-width : 600px) {
+  #index-banner .section {
+    top: 0;
+  }
+}
+
+.icon-block {
+  padding: 0 15px;
+}
+.icon-block .material-icons {
+  font-size: inherit;
+}
+
+h1.header.center
+{
+    font-size:3em;
+}
+
+p.desc{
+  font-size: 1.3em;
+  line-height: 1.3em;
+}
+
+footer.page-footer {
+  margin: 0;
+}
+
+i.fa-twitter{
+  color:white;
+}
+a:hover i.fa-twitter{
+  color:#90caf9;
+}
+
+i.fa-github{
+  color:white;
+}
+a:hover i.fa-github{
+  color:#90caf9;
+}
+
+i.fa-envelope{
+  color:white;
+}
+a:hover i.fa-envelope{
+  color:#90caf9;
+}
+
+i.fa-facebook-square{
+  color:white;
+}
+a:hover i.fa-facebook-square{
+  color:#90caf9;
+}
+
+ @media (max-width: 550px) {
+     .big-container {
+         display: none;
+     }
+ 
+ }
+ @media (min-width: 550px) {
+     .small-container {
+         display: none;
+     }
+     p.desc{
+      font-size: 1.6em;
+      line-height: 1.5em;
+    }
+    h1.header.center
+    {
+        font-size:4em;
+    }
+ }
+ /* Responsive iFrame */
+ .responsive-iframe-container {
+     position: relative;
+     padding-bottom: 56.25%;
+     padding-top: 30px;
+     height: 0;
+     overflow: hidden;
+ }
+ .responsive-iframe-container iframe,   
+ .vresponsive-iframe-container object,  
+ .vresponsive-iframe-container embed {
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+ }
