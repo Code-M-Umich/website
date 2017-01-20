@@ -1,42 +1,51 @@
- <!DOCTYPE html>
+{% set PATH_FAVICON = url_for('static', filename='img/logo_m.ico') %}
+{% set PATH_CSS_MAIN = url_for('static', filename='css/main.css') %}
+{% set PATH_LOGO_S = url_for('static', filename='img/logo_small.png') %}
+{% set PATH_JS_JQ = url_for('static', filename='js/jquery.js') %}
+{% set PATH_JS_MAIN = url_for('static', filename='js/main.js') %}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-  <title>Code-M - Home</title>
+  <title>Code-M - {% block title %}Home{% endblock %}</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0"/>
+  <link rel="shortcut icon" href="{{ PATH_FAVICON }}" type="image/x-icon">
 
-
+  <!-- Stylesheets -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css" media="screen,projection">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
-  <link href="static/css/main.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <link rel="shortcut icon" href="static/img/logo_m.ico" type="image/x-icon">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0"/>
+  <link href="{{ PATH_CSS_MAIN }}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  {% block css %}{% endblock %}
+
+  
 
 </head>
 <body>
 
 <nav class="white" role="navigation">
-    <div class="nav-wrapper container">
-      <a id="logo-container" href="/" class="brand-logo"><img src="static/img/logo_small.png" height="29" width="150"></a>
-      <ul class="right hide-on-med-and-down">
-                <li class='active'><a href='/'>Home</a></li>
-                <li class=''><a href='join'>Join</a></li>
-                <li class=''><a href='calendar'>Calendar</a></li>
-                <li class=''><a href='companies'>Companies</a></li>
-                <li class=''><a href='contact'>Contact</a></li>
-              </ul>
+	<div class="nav-wrapper container">
+		<a id="logo-container" href="/" class="brand-logo"><img src="{{ PATH_LOGO_S }}" height="29" width="150"></a>
+		<ul class="right hide-on-med-and-down">
+				<li class='active'><a href='{{ url_for("main.main_route") }}'>Home</a></li>
+				<li class=''><a href='{{ url_for("join.join_route") }}'>Join</a></li>
+				<li class=''><a href='{{ url_for("calendar.calendar_route") }}'>Calendar</a></li>
+				<li class=''><a href='{{ url_for("companies.companies_route") }}'>Companies</a></li>
+				<li class=''><a href='{{ url_for("contact.contact_route") }}'>Contact</a></li>
+		</ul>
 
-      <ul id="nav-mobile" class="side-nav">
-                <li class='active'><a href='/'>Home</a></li>
-                <li class=''><a href='join'>Join</a></li>
-                <li class=''><a href='calendar'>Calendar</a></li>
-                <li class=''><a href='companies'>Companies</a></li>
-                <li class=''><a href='contact'>Contact</a></li>
-              </ul>
-      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
-    </div>
+		<ul id="nav-mobile" class="side-nav">
+				<li class='active'><a href='{{ url_for("main.main_route") }}'>Home</a></li>
+				<li class=''><a href='{{ url_for("join.join_route") }}'>Join</a></li>
+				<li class=''><a href='{{ url_for("calendar.calendar_route") }}'>Calendar</a></li>
+				<li class=''><a href='{{ url_for("companies.companies_route") }}'>Companies</a></li>
+				<li class=''><a href='{{ url_for("contact.contact_route") }}'>Contact</a></li>
+		</ul>
+		<a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+	</div>
   </nav>  
 
 	{% block content %} {% endblock %}
@@ -62,7 +71,7 @@
 		</div>
 		<div class="footer-copyright">
 			<div class="container">
-				(C) 2016 Code-M.
+				(C) 2016 Code-M
 			</div>
 		</div>
 	</footer>
@@ -70,8 +79,9 @@
 
 	<!--  Scripts-->
 	<!--Import jQuery before materialize.js-->
-	<script type="text/javascript" src="../static/js/jquery.js"></script>
+	<script type="text/javascript" src="{{ PATH_JS_JQ }}"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
-	<script src="../static/js/main.js"></script>
+	<script src="{{ PATH_JS_MAIN }}"></script>
+	{% block js %}{% endblock %}
 </body>
 </html>

@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 import config
 
-app = Flask(__name__, template_folder='views')
+app = Flask(__name__, template_folder='views', static_folder='static')
 app.config.from_object(config)
 
 import controllers
