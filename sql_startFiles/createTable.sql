@@ -5,27 +5,31 @@ DROP TABLE IF EXISTS users, events, attendance;
 CREATE TABLE users
 (
 	uniqname varchar(10) PRIMARY KEY,
-	admin bool DEFAULT false
+	admin bool DEFAULT false,
+	joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE events
 (
-	eventid int PRIMARY KEY AUTO_INCREMENT,
+	eventID int PRIMARY KEY AUTO_INCREMENT,
 	name varchar(100) NOT NULL,
 	host varchar(100) NOT NULL,
-	datetime varchar(100) NOT NULL,
+	datetime DATETIME NOT NULL,
 	location varchar(100) NOT NULL,
 	description varchar(2000) NOT NULL,
-	access varchar(10) NOT NULL,
+	accessCode varchar(10) NOT NULL,
     open bool NOT NULL DEFAULT 0,
-	points DEC(3,2) NOT NULL
+	points DEC(3,2) NOT NULL,
+	semester CHAR(4) NOT NULL,
+	lastUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE attendance
 (
-	attid int PRIMARY KEY AUTO_INCREMENT,
+	attID int PRIMARY KEY AUTO_INCREMENT,
 	uniqname varchar(10),
-	event int,
-	FOREIGN KEY (uniqname) REFERENCES WINTER2017_users(uniqname),
-	FOREIGN KEY (event) REFERENCES WINTER2017_events(eventid)
+	eventID int,
+	logTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (uniqname) REFERENCES users(uniqname),
+	FOREIGN KEY (eventID) REFERENCES events(eventID)
 );
