@@ -1,35 +1,50 @@
 {% extends 'base.html' %}
 {% block content%}
 
+{{ email2 }}
+{% if incorrect %}
+<h1>Incorrect password</h1>
+{% else %}
 <div class="container col-md-6" style="padding-top: 3em; padding-bottom: 3em " >
 	<form method="post">
+		
 		<span class="sH1">Name of Event: </span><input type="text" name="eventName" placeholder="Intro to HTML Workshop" required/>
+
 		<h1>Date and Time</h1>
 		<span class="sH1">Date of Event: </span><input type="date" name="eventDate" min="2017-02-02" required/>
 		<span class="sH1">Time interval you are available to host the event: </span><br>
-		<span class="sH2">Start Time</span><input type="time" name="startTime" required>
-		<span class="sH2">End Time</span><input type="time" name="endTime" required>
-		<span class="sH2">Preffered Start Time</span><input type="time" name="prefStartTime" required>
+		<span class="sH2">Available Starting Time</span><input type="time" name="startTime" required>
+		<span class="sH2">Available Ending Time</span><input type="time" name="endTime" required>
+		<span class="sH2">Preferred Start Time</span><input type="time" name="prefStartTime" required>
 		<span class="sH2">Duration of Event (hours)</span><input type="number" name="eventDuration" step=".25" min=".25" max="100" required>
 		* Example: I am availble to host this workshop from 5pm-10pm on this day. However, I would like the event to start at 6pm and go to 8pm. 
 		Therefore my Start Time = 5pm, End Time = 10pm, Preffered Start Time = 6pm, Duration of Event = 2
+
 		<h1>Location</h1>
 		<span class="sH1">Is a room already reserved?</span>
-			<p><input type="radio" id="roomIsReserved" name="isReserved" value="yes" checked onchange="allowInput('roomReservationDetails')"><label for="roomIsReserved">Yes</label></p>
-			<p><input type="radio" id="roomNotReserved" name="isReserved" value="no" onchange="allowInput('roomReservationDetails')"><label for="roomNotReserved">No</label></p>
+			<p>
+				<input type="radio" id="roomIsReserved" name="isReserved" value="yes" checked onchange="allowInput('roomReservationDetails')">
+				<label for="roomIsReserved">Yes</label>
+			</p>
+			<p>
+				<input type="radio" id="roomNotReserved" name="isReserved" value="no" onchange="allowInput('roomReservationDetails')">
+				<label for="roomNotReserved">No</label>
+			</p>
 		<div id="roomReservationDetails">
 			<span class="sH1">Campus:</span>
 				<p><input type="radio" id="northRad" name="campus" value="North" checked disabled/><label for="northRad">North</label></p>
 				<p><input type="radio" id="centRad" name="campus" value="Central" disabled/><label for="centRad">Central</label></p>
 
 			<div class="input-field">
-				<span class="sH1">Building Preference:</span>
-				<input type="text" name="building" placeholder="DOW" disabled/>
+				<span class="sH1">Building:</span>
+				<input type="text" name="building" placeholder="DOW" class="dont-disable"/>
 			</div>
+
 			<div class="input-field">
-				<span class="sH1">Room Preference:</span>
-				<input type="text" name="roomPref" placeholder="Shaquisha" disabled/>
+				<span class="sH1">Room</span>
+				<input type="text" name="room" placeholder="Shaquisha" class="dont-disable"/>
 			</div>
+
 			<div class="input-field">
 				<span class="sH1">Room Size Preference:</span>
 				<select name="roomSize" disabled>
@@ -40,7 +55,8 @@
 				</select>
 			</div>
 			
-		</div>
+		</div> <!-- END #roomReservationDetails -->
+
 		<h1>Event Description</h1>
 		<span class="sH1">1-2 Sentence description: </span><input type="text" name="desc" required>
 		<span class="sH1">Full Description: </span><textarea name="fullDesc" rows="5" required></textarea>
@@ -62,6 +78,7 @@
 				<option value="Other">Other</option>
 			</select>
 		</div>
+
 		<h1>Host</h1>
 		<span class="sH1">Host Email: </span><input type="text" name="hostEmail" placeholder="you@umich.edu" required>
 		<span class="sH1">Cohost Email: </span><input type="text" name="cohostEmail" placeholder="indyJ@umich.edu">
@@ -69,8 +86,36 @@
 		<input type="submit">
 		* This data will be sent to room reservations and social media. Make sure your data is correct and typo free.
 	</form>
-	</div>
-	<style>
-		span{ font-size: 1.3em; }
-	</style>
+</div> <!-- END  .container -->
+{% endif %}
+
+<style>
+	span{ font-size: 1.3em; }
+</style>
+{% endblock %}
+{% block js %}
+<script>
+	// Toggles between if room reservation details input can be selected
+	function allowInput(id)
+	{
+		var isRoomReserved = $('#roomIsReserved').prop('checked');
+		var setBool = true;
+		if (isRoomReserved == false)
+			setBool = false;
+		$('#' + id + ' input').each(function(){
+			if ( $(this).hasClass('dont-disable') && setBool == true )
+				return 'a'; //jquery continue
+			$(this).prop('disabled', setBool);
+		});
+		$('#' + id + ' select').each(function(){
+			if ( $(this).hasClass('dont-disable') && setBool == true )
+				return 'a'; //jquery continue
+			$(this).prop('disabled', setBool);
+		});
+		$('select').material_select(); // needed to update materialize selects ugh
+	}
+	$(document).ready(function() {
+		$('select').material_select(); //needed for materialize to show selects
+	});
+</script>
 {% endblock %}

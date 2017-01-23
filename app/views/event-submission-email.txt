@@ -1,0 +1,30 @@
+TO: {{ hostEmail }}, {% if cohostEmail %}{{ cohostEmail }}{% endif %}
+CC: {{ senderEmail }}
+SUBJECT: {{ eventName }} | Sent by Code-M Event Submission
+FROM: {{ senderEmail }}
+
+Thanks for submitting an event. Here is the information you submitted.
+
+Name of Event: {{ eventName }}
+Date of Event: {{ dateOfEvent }}
+Available starting: {{ possibleStartTime12 }}
+Available ending: {{ possibleEndTime12 }}
+Preffered Start Time: {{ prefStartTime12 }}
+Event Duration: {{ eventDuration }}
+Attendee Access Password: {{ accessCode }}
+{% if isReserved %}
+You selected a room was reserved with the following details
+Building: {{ building }}
+Room: {{ room }}
+{% else %}
+You requested a room reservation with the following details
+Campus: {{ campus }}
+Building: {{ building }}
+Room Preference: {{ room }}
+Room Size: {{ roomSize }}
+{% endif %}
+Short Description: {{ shortDesc }}
+Full Description: {{ fullDesc }}
+Event Type: {{ eventType }}
+
+Code-M

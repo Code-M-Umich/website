@@ -1,0 +1,10 @@
+TO: {{ recipientEmail }}
+SUBJECT: [Code-M] Room Request for Code-M Event
+FROM: {{ sendEmail }}
+
+Hi {{ recipientName }},
+
+We are looking to reserve a room on {{ eventDate }} at {{ startTime }} until {{ endTime }} in {{ room }}, {{ building }}. If that isn't possible, we can work with something between {{ startRange }} and {{ endRange }} (with the event being {{ duration }} hours). The ideal room would be a {{ roomSize }} sized room in {{ building }}.
+
+Thanks,
+Code-M
