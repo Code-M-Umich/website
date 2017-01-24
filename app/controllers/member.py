@@ -13,22 +13,6 @@ def get_points(uniqname):
 	points = 0		
 	return points
 
-def add_attendence(uniqname, eventID):
-	cur = mysql.connection.cursor()
-	query = "INSERT INTO codeM.attendance (uniqname, event) " \
-			"VALUES (\"%s\",\"%d\")" % (uniqname, eventID)
-	cur.execute(query)
-	mysql.connection.commit()
-	cur.close()
-
-def get_members(uniqname, eventID):
-	cur = mysql.connection.cursor()
-	query = "INSERT INTO codeM.attendance (uniqname, event) " \
-			"VALUES (\"%s\",\"%d\")" % (uniqname, eventID)
-	cur.execute(query)
-	mysql.connection.commit()
-	cur.close()
-
 @member.route('/member')
 def member_route():
 	options = {}
