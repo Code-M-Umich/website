@@ -1,4 +1,4 @@
-USE codeM;
+USE codem;
 
 DROP TABLE IF EXISTS users, events, attendance;
 
