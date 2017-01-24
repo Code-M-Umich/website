@@ -26,8 +26,32 @@ def get_points(uniqname):
 	cur.execute(query)
 	entries = cur.fetchall()
 	print entries
-	points = 0		
+	points = 0	
+	cur.close()	
 	return points
+
+def get_admin(uniqname):
+	cur = mysql.connection.cursor()
+	query = "SELECT admin from users " \
+			"WHERE uniqname = \"%s\";" % uniqname
+	cur.execute(query)
+	entries = cur.fetchall()
+	print entries
+	if len(entries):
+		cur.close()
+		#check whether received true or false
+
+		return True
+	else len(entries):
+		query = "INSERT INTO codem.users (uniqname) " \
+				"VALUES (\"%s\")" % (uniqname)
+		cur.execute(query)
+		mysql.connection.commit()
+		cur.close()
+		#not admin by default
+		return False
+	
+	return True
 
 @member.route('/member')
 def member_route():
