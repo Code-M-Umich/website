@@ -20,7 +20,7 @@ CREATE TABLE events
 	accessCode varchar(10) NOT NULL,
     open bool NOT NULL DEFAULT 0,
 	points DEC(3,2) NOT NULL,
-	semester CHAR(4) NOT NULL,
+	semester CHAR(5) NOT NULL,
 	lastUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
