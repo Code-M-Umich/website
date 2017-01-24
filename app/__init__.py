@@ -6,6 +6,9 @@ app.config.from_object(config)
 
 import controllers
 
+# MySQL init
+controllers.database.mysql.init_app(controllersapp)
+
 # Register blueprints
 app.register_blueprint(controllers.calendar)
 app.register_blueprint(controllers.companies)
@@ -13,10 +16,6 @@ app.register_blueprint(controllers.contact)
 app.register_blueprint(controllers.submit_events)
 app.register_blueprint(controllers.join)
 app.register_blueprint(controllers.main)
-
-@app.errorhandler(401)
-def custom_401(error, url="srapq281tt9/pa2"):
-	return "Error 401 - Not authorized."
 
 @app.errorhandler(404)
 def not_found(err):

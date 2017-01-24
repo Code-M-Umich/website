@@ -13,10 +13,10 @@ MAIL_USERNAME = 'test@gmail.com'
 MAIL_PASSWORD = 'testing'
 
 #database stuff
-MYSQL_HOST = ""
+MYSQL_HOST = "localhost"
 MYSQL_PORT = 3306
-MYSQL_USER = "labwatch"
-MYSQL_PASSWORD = "rpbcbcbdargfk74"
+MYSQL_USER = "codem"
+MYSQL_PASSWORD = "YELLOWSUBMARINE"
 
 if ENV == 'dev':
     DEBUG = True

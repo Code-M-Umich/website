@@ -2,6 +2,22 @@ from flask import render_template, Blueprint
 
 member = Blueprint('member', __name__, template_folder='views')
 
+def get_members(uniqname, eventID):
+	cur = mysql.connection.cursor()
+	query = "INSERT INTO codeM.attendance (uniqname, event) " \
+			"VALUES (\"%s\",\"%d\")" % (uniqname, eventID)
+	cur.execute(query)
+	mysql.connection.commit()
+	cur.close()
+
+def add_attendence(uniqname, eventID):
+	cur = mysql.connection.cursor()
+	query = "INSERT INTO codeM.attendance (uniqname, event) " \
+			"VALUES (\"%s\",\"%d\")" % (uniqname, eventID)
+	cur.execute(query)
+	mysql.connection.commit()
+	cur.close()
+
 def get_points(uniqname):
 	cur = mysql.connection.cursor()
 	query = "SELECT SUM(events.points) from events " \
