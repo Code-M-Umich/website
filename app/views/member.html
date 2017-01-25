@@ -1,5 +1,52 @@
 {% extends 'base.html' %}
 
 {% block content%}
+
+{% if submittedCode %}
+<div class='valign-wrapper fill'>
+    <h3 class='center-block valign'>
+    {% if isAuth == True %}
+    Your attendance has been recorded for {{ authedEventName }}.
+    {% else %}
+    Incorrect event code. Please try again.
+    {% endif %}
+    </h3>
+</div>
+{% endif %}
+
+<div class="fill">
+    
+    <div id="status" class="left-align">
+        <h5>Hello {{ user }}</h5>
+        {{  compliment }} and<br>
+        You have earned <b>{{ points }}</b> points.
+    </div>
+
+    {% if events %}
+        <!-- display all open events -->
+        {% for e in events %}
+            <div class="wrap-event">
+                <h1 class="header center blue-text">{{ e.name }}</h1>
+                <div class="row">
+                    <div class="col s12">
+                        <div class="input-field col s12">
+                            <form name="" method="post">
+                                <input type="hidden" name="eventID" value="{{ e.eventID }}">
+                                <label for="eventCode">Event Code</label>
+                                <input type="text" name="eventCode" class="eventCode" required>
+                                <button class="btn waves-effect waves-light blue" type="submit">Submit
+                                <i class="material-icons right">send</i>
+                                </button>
+                            </form>
+                        </div>
+                    </div> <!-- END .col.s12 -->
+                </div> <!-- END .row -->
+        </div> <!-- END .wrap-event -->
+        {% endfor %}
+    {% else %}
+    No events are currently going on.
+    {% endif %}
+    
+</div> <!-- end .fill -->	
 	
 {% endblock %}
