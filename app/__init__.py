@@ -6,9 +6,6 @@ app.config.from_object(config)
 
 import controllers
 
-# MySQL init
-controllers.database.mysql.init_app(controllersapp)
-
 # Register blueprints
 app.register_blueprint(controllers.calendar)
 app.register_blueprint(controllers.companies)

@@ -1,25 +1,25 @@
 from flask import render_template, Blueprint
-
+from database import openDBConnection, closeDBConnection, DBCommit
 member = Blueprint('member', __name__, template_folder='views')
 
 def get_members(uniqname, eventID):
-	cur = mysql.connection.cursor()
-	query = "INSERT INTO codeM.attendance (uniqname, event) " \
+	cur = openDBConnection()
+	query = "INSERT INTO attendance (uniqname, event) " \
 			"VALUES (\"%s\",\"%d\")" % (uniqname, eventID)
 	cur.execute(query)
-	mysql.connection.commit()
-	cur.close()
+	DBCommit()
+	closeDBConnection()
 
 def add_attendence(uniqname, eventID):
-	cur = mysql.connection.cursor()
-	query = "INSERT INTO codeM.attendance (uniqname, event) " \
+	cur = openDBConnection()
+	query = "INSERT INTO attendance (uniqname, event) " \
 			"VALUES (\"%s\",\"%d\")" % (uniqname, eventID)
 	cur.execute(query)
-	mysql.connection.commit()
-	cur.close()
+	DBCommit()
+	closeDBConnection()
 
 def get_points(uniqname):
-	cur = mysql.connection.cursor()
+	cur = openDBConnection()
 	query = "SELECT SUM(events.points) from events " \
 		"JOIN attendance ON events.eventid = attendance.event " \
 		"WHERE attendance.uniqname = \"%s\";" % uniqname
@@ -27,27 +27,27 @@ def get_points(uniqname):
 	entries = cur.fetchall()
 	print entries
 	points = 0	
-	cur.close()	
+	closeDBConnection()	
 	return points
 
 def get_admin(uniqname):
-	cur = mysql.connection.cursor()
+	cur = openDBConnection()
 	query = "SELECT admin from users " \
 			"WHERE uniqname = \"%s\";" % uniqname
 	cur.execute(query)
 	entries = cur.fetchall()
 	print entries
 	if len(entries):
-		cur.close()
+		closeDBConnection()
 		#check whether received true or false
 
 		return True
-	else len(entries):
-		query = "INSERT INTO codem.users (uniqname) " \
+	else:
+		query = "INSERT INTO users (uniqname) " \
 				"VALUES (\"%s\")" % (uniqname)
 		cur.execute(query)
-		mysql.connection.commit()
-		cur.close()
+		DBCommit()
+		closeDBConnection()
 		#not admin by default
 		return False
 	

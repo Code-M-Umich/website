@@ -17,18 +17,7 @@ MYSQL_HOST = "localhost"
 MYSQL_PORT = 3306
 MYSQL_USER = "codem"
 MYSQL_PASSWORD = "YELLOWSUBMARINE"
+MYSQL_DB = "codem"
 
-if ENV == 'dev':
-    DEBUG = True
-    PORT = 5000
-elif ENV == 'prod':
-    DEBUG = False
-    PORT = 5000
-
-elif ENV == 'local':
-    DEBUG = True
-    PORT = 5000
-
-else:
-    DEBUG = True
-    PORT = 5000
+DEBUG = True
+PORT = 3000
