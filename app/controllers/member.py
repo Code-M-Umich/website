@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint
 from database import openDBConnection, closeDBConnection, DBCommit
-from includes import randomCompliment
+from util import randomCompliment
 
 member = Blueprint('member', __name__, template_folder='views')
 
