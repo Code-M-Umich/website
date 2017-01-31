@@ -4,8 +4,6 @@ from includes import randomCompliment
 
 member = Blueprint('member', __name__, template_folder='views')
 
-
-
 def get_members(uniqname, eventID):
 	cur = openDBConnection()
 	query = "INSERT INTO attendance (uniqname, event) " \
@@ -16,11 +14,11 @@ def get_members(uniqname, eventID):
 
 # returns all the peope who attended an event 
 def get_event_attendance(eventID):
-	cur = mysql.connection.cursor()
+	cur = openDBConnection()
 	query = "SELECT uniqname FROM codeM.attendance WHERE eventID=\"%d\";" % eventID
 	cur.execute(query)
 	entries = cur.fetchall()
-	cur.close()
+	closeDBConnection()
 	return entries
 
 def add_attendence(uniqname, eventID):
