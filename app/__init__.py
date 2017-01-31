@@ -10,9 +10,10 @@ import controllers
 app.register_blueprint(controllers.calendar)
 app.register_blueprint(controllers.companies)
 app.register_blueprint(controllers.contact)
-app.register_blueprint(controllers.submit_events)
 app.register_blueprint(controllers.join)
 app.register_blueprint(controllers.main)
+app.register_blueprint(controllers.member)
+app.register_blueprint(controllers.submit_events)
 
 @app.errorhandler(404)
 def not_found(err):
