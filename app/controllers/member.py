@@ -37,13 +37,8 @@ def get_points(uniqname):
 	cur.execute(query)
 	entries = cur.fetchone()
 	print entries
-<<<<<<< HEAD
 	points = 0	
 	closeDBConnection()	
-=======
-	points = entries['points']
-	cur.close()	
->>>>>>> d47ad4b152576c0d273c771aaf7a1dbc810417f0
 	return points
 
 # Returns true if a given user is an admin
@@ -55,7 +50,6 @@ def get_admin(uniqname):
 	entries = cur.fetchall()
 	print entries
 	if len(entries):
-<<<<<<< HEAD
 		closeDBConnection()
 		#check whether received true or false
 
@@ -70,21 +64,6 @@ def get_admin(uniqname):
 		return False
 	
 	return True
-=======
-		cur.close()
-		return True
-	return False
-
-# Adds user to the database once they visit the memebers page
-def add_user(uniqname):
-	query = "INSERT INTO codem.users (uniqname) " \
-				"VALUES (\"%s\")" % (uniqname)
-	cur.execute(query)
-	mysql.connection.commit()
-	cur.close()
-
-# TODO: def add_admin(uniqname):
->>>>>>> d47ad4b152576c0d273c771aaf7a1dbc810417f0
 
 # Checks to see if the user entered accessCode is correct for a given event
 def validateAttendance(uniqname, userEnteredCode, eventID):
