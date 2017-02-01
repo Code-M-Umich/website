@@ -67,11 +67,11 @@ def get_admin(uniqname):
 
 # Checks to see if the user entered accessCode is correct for a given event
 def validateAttendance(uniqname, userEnteredCode, eventID):
-	cur = mysql.connection.cursor()
+	cur = openDBConnection()
 	query = "SELECT accessCode FROM events WHERE eventID=\"%d\" AND open=1 LIMIT 1" % (eventID)
 	cur.execute(query)
 	accessCode = cur.fetchone()
-	cur.close()
+	closeDBConnection()
 	if userEnteredCode == accessCode:
 		add_attendence(uniqname, eventID)
 		return True
@@ -80,20 +80,20 @@ def validateAttendance(uniqname, userEnteredCode, eventID):
 
 # returns all the details about an event
 def get_event(eventid):
-	cur = mysql.connection.cursor()
+	cur = openDBConnection()
 	query = "SELECT * FROM events WHERE eventID=\"%d\";" % (eventID)
 	cur.execute(query)
 	entry = cur.fetchone()
-	cur.close()
+	closeDBConnection()
 	return entry
 
 # Returns all the currently open events
 def get_open_events():
-	cur = mysql.connection.cursor()
+	cur = openDBConnection()
 	query = "SELECT * FROM events WHERE open=1"
 	cur.execute(query)
 	entries = cur.fetchall()
-	cur.close()
+	closeDBConnection()
 	return entries
 
 @member.route('/member', methods=['GET', 'POST'])
