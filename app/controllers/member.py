@@ -102,7 +102,6 @@ def member_route():
 	user = request.environ['REMOTE_USER'] #should always be valid with cosign
 	isAuth = False
 	didSubmit = False
-	return user
     
 	# Handle event code submission
 	if request.method == 'POST' and request.form['eventCode']:
