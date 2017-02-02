@@ -89,10 +89,13 @@ def get_event(eventid):
 
 # Returns all the currently open events
 def get_open_events():
+	entries = []
 	cur = openDBConnection()
-	query = "SELECT * FROM events WHERE open=1"
+	query = "SELECT eventID, name FROM events WHERE open=1"
 	cur.execute(query)
-	entries = cur.fetchall()
+	results = cur.fetchall()
+	for i in results:
+		entries.append( i[0],i[1] )
 	closeDBConnection()
 	return entries
 
