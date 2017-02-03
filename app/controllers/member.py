@@ -32,13 +32,15 @@ def add_attendence(uniqname, eventID):
 def get_points(uniqname):
 	conn, cur = openDBConnection()
 	query = "SELECT SUM(events.points) from events " \
-		"JOIN attendance ON events.eventid = attendance.event " \
-		"WHERE attendance.uniqname = \"%s\";" % uniqname
+	"JOIN attendance ON events.eventid = attendance.eventID " \
+	"WHERE attendance.uniqname = \"%s\";" % uniqname
 	cur.execute(query)
 	entries = cur.fetchone()
-	print entries
-	points = 0	
-	closeDBConnection(conn, cur)	
+	if entries:
+		points = entries[0]
+	else:
+		points = 0
+	closeDBConnection(conn, cur)
 	return points
 
 # Returns true if a given user is an admin
