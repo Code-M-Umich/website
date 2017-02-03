@@ -36,9 +36,8 @@ def get_points(uniqname):
 	"WHERE attendance.uniqname = \"%s\";" % uniqname
 	cur.execute(query)
 	entries = cur.fetchone()
-	if entries:
-		points = entries[0]
-	else:
+	points = entries[0]
+	if points == None:
 		points = 0
 	closeDBConnection(conn, cur)
 	return points
