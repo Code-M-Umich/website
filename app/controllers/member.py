@@ -90,13 +90,13 @@ def get_event(eventid):
 # Returns all the currently open events
 def get_open_events():
 	entries = []
-	cur = openDBConnection()
+	conn,cur = openDBConnection()
 	query = "SELECT eventID, name FROM events WHERE open=1"
 	cur.execute(query)
 	results = cur.fetchall()
 	for i in results:
 		entries.append( i[0],i[1] )
-	closeDBConnection()
+	closeDBConnection(conn,cur)
 	return entries
 
 @member.route('/member', methods=['GET', 'POST'])
