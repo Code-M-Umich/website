@@ -12,12 +12,6 @@ MAIL_USE_SSL = True
 MAIL_USERNAME = 'test@gmail.com'
 MAIL_PASSWORD = 'testing'
 
-#database stuff
-MYSQL_HOST = "localhost"
-MYSQL_PORT = 3306
-MYSQL_USER = "codem"
-MYSQL_PASSWORD = "YELLOWSUBMARINE"
-MYSQL_DB = "codem"
 
 DEBUG = True
 PORT = 3000

@@ -13,7 +13,7 @@ MYSQL_DB = "codem"
 def openDBConnection():
 	global conn,cur
 	conn = pymysql.connect( host=MYSQL_HOST, port=MYSQL_PORT, 
-		user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DB)
+		user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DBc)
 	cur = conn.cursor()
 	return cur
 
