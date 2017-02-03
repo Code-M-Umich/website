@@ -120,7 +120,7 @@ def member_route():
 
 	options = {
 		'user' : user,
-		'event' : get_open_events(),
+		'events' : get_open_events(),
 		'didSubmitCode' : didSubmit,
 		'isAuth' : isAuth,
 		'points' : get_points(user),
