@@ -4,13 +4,21 @@ from util import randomCompliment
 
 member = Blueprint('member', __name__, template_folder='views')
 
-def get_members(uniqname, eventID):
-	cur = openDBConnection()
-	query = "INSERT INTO attendance (uniqname, event) " \
-			"VALUES (\"%s\",\"%d\")" % (uniqname, eventID)
+def get_members():
+	conn,cur = openDBConnection()
+	query = "SELECT * FROM users" 
 	cur.execute(query)
-	DBCommit()
-	closeDBConnection()
+    results = cur.fetchall()
+    entries = []
+    for i in results:
+        entries.append( 
+            {"uniqname": i[0],
+             "joined": i[1],
+             "admin": i[2]
+            }
+        )
+	closeDBConnection(conn,cur)
+    return entries
 
 # returns all the peope who attended an event 
 def get_event_attendance(eventID):
@@ -44,23 +52,22 @@ def get_points(uniqname):
 
 # Returns true if a given user is an admin
 def get_admin(uniqname):
-	cur = openDBConnection()
+	conn,cur = openDBConnection()
 	query = "SELECT admin from users " \
 			"WHERE uniqname = \"%s\" LIMIT 1" % uniqname
 	cur.execute(query)
-	entries = cur.fetchall()
-	print entries
+	entries = cur.fetchone()
 	if len(entries):
-		closeDBConnection()
+		closeDBConnection(conn,cur)
 		#check whether received true or false
 
-		return True
+		return entries[0]
 	else:
 		query = "INSERT INTO users (uniqname) " \
 				"VALUES (\"%s\")" % (uniqname)
 		cur.execute(query)
-		DBCommit()
-		closeDBConnection()
+		DBCommit(conn)
+		closeDBConnection(conn,cur)
 		#not admin by default
 		return False
 	
@@ -81,11 +88,11 @@ def validateAttendance(uniqname, userEnteredCode, eventID):
 
 # returns all the details about an event
 def get_event(eventid):
-	cur = openDBConnection()
+	conn,cur = openDBConnection()
 	query = "SELECT * FROM events WHERE eventID=\"%d\";" % (eventID)
 	cur.execute(query)
 	entry = cur.fetchone()
-	closeDBConnection()
+	closeDBConnection(conn,cur)
 	return entry
 
 # Returns all the currently open events
@@ -102,30 +109,34 @@ def get_open_events():
 
 @member.route('/member', methods=['GET', 'POST'])
 def member_route():
-	options = {}
 	user = request.environ['REMOTE_USER'] #should always be valid with cosign
-	isAuth = False
-	didSubmit = False
-    
-	# Handle event code submission
-	if request.method == 'POST' and request.form['eventCode']:
-		didSubmit = True
-		f = request.form
-		eventID= f['eventID']
-		if validateAttendance(user, f['eventCode'], eventID):
-			isAuth = True
-			event = get_event(eventID)
-			options['authedEventName'] = event['name']
-		
+	#If the user is an admin, give them admin page
+    if get_admin(user):
+        options = {
+            'users' : get_members()
+        }
+        return render_template("admin.html", **options)
+    else:
+    	isAuth = False
+    	didSubmit = False
+        
+    	# Handle event code submission
+    	if request.method == 'POST' and request.form['eventCode']:
+    		didSubmit = True
+    		f = request.form
+    		eventID= f['eventID']
+    		if validateAttendance(user, f['eventCode'], eventID):
+    			isAuth = True
+    			event = get_event(eventID)
+    			options['authedEventName'] = event['name']
 
+    	options = {
+    		'user' : user,
+    		'events' : get_open_events(),
+    		'didSubmitCode' : didSubmit,
+    		'isAuth' : isAuth,
+    		'points' : get_points(user),
+    		'compliment' : randomCompliment()
+    	} 
 
-	options = {
-		'user' : user,
-		'events' : get_open_events(),
-		'didSubmitCode' : didSubmit,
-		'isAuth' : isAuth,
-		'points' : get_points(user),
-		'compliment' : randomCompliment()
-	} 
-
-	return render_template("member.html", **options)
+    	return render_template("member.html", **options)

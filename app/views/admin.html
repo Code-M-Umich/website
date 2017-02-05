@@ -1,8 +1,27 @@
 {% extends 'base.html' %}
 {% block content%}
 
-<div class="section container">
+<div class="container">
 	
+	{% if users %}
+	<div class="section">
+			<h3>Members</h3> 
+			<table>
+				<tr>
+				    <th>Uniqname</th>
+				    <th>Joined</th> 
+				    <th>Admin</th>
+			    </tr>
+			    {% for user in users %}
+				<tr>
+			    	<td> {{ user.uniqname }} </td>
+			    	<td> {{ user.joined }} </td>
+			    	<td> {{ user.admin }} </td>
+				</tr>
+			    {% endfor %}
+			</table>
+	</div>
+	{% endif %}
 
 </div>
 
