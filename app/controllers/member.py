@@ -13,8 +13,8 @@ def get_members():
     for i in results:
         entries.append( 
             {"uniqname": i[0],
-             "joined": i[1],
-             "admin": i[2]
+             "admin": i[1],
+             "joined": i[2]
             }
         )
     closeDBConnection(conn,cur)
@@ -73,6 +73,17 @@ def get_admin(uniqname):
     
     return True
 
+def set_admin(uniqname, admin):
+    conn,cur = openDBConnection()
+    query = "UPDATE users" \
+            "SET admin= %d" \
+            "WHERE uniqname='%s'" % (admin, uniqname) 
+    cur.execute(query)
+    DBCommit(conn)
+    closeDBConnection(conn,cur)
+    return True
+    #not admin by default
+    
 # Checks to see if the user entered accessCode is correct for a given event
 def validateAttendance(uniqname, userEnteredCode, eventID):
     cur = openDBConnection()
@@ -140,3 +151,14 @@ def member_route():
         } 
 
         return render_template("member.html", **options)
+
+@member.route('/_member_update_admin', methods=['POST'])
+def update_user_route():
+    user = request.environ['REMOTE_USER'] #should always be valid with cosign
+    if get_admin(user):
+        uniqname = str(request.args.get('uniqname'))
+        state = str(request.args.get('state'))
+        return set_admin(uniqname, state)
+
+#make users global, so that when sorting or removing or whatever, you don't
+#have to reload the whole users database again.

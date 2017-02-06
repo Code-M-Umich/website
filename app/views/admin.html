@@ -16,7 +16,7 @@
 				<tr>
 			    	<td> {{ user.uniqname }} </td>
 			    	<td> {{ user.joined }} </td>
-			    	<td> {{ user.admin }} </td>
+			    	<td> <input type="checkbox" name="{{ user.uniqname }} checked={{ user.admin}}"/> </td>
 				</tr>
 			    {% endfor %}
 			</table>
@@ -24,5 +24,29 @@
 	{% endif %}
 
 </div>
+
+<script>
+$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+
+
+var set_admin = function() {
+		uniqname= $(this).name
+		state = if(!$(this).is(':checked'));
+		console.log('/_member_update_admin?uniqname='+uniqname + '&state='+state)
+	//	$.getJSON($SCRIPT_ROOT + '/_member_update_admin?uniqname='+uniqname + '&state='+state, function(data) {
+
+	//	});
+
+};
+
+
+$('.toggle_box').click( function(){
+	set_admin();
+}
+
+
+});
+
+</script>
 
 {% endblock %}
