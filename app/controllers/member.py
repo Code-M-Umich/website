@@ -1,8 +1,13 @@
 from flask import render_template, Blueprint, request
 from database import openDBConnection, closeDBConnection, DBCommit
 from util import randomCompliment
+from app import config
 
 member = Blueprint('member', __name__, template_folder='views')
+
+USER = config.USER
+if USER is '':
+    USER = request.environ['REMOTE_USER'] #should always be valid with cosign
 
 def get_members():
     conn,cur = openDBConnection()
@@ -120,7 +125,7 @@ def get_open_events():
 
 @member.route('/member', methods=['GET', 'POST'])
 def member_route():
-    user = request.environ['REMOTE_USER'] #should always be valid with cosign
+    user = USER
     #If the user is an admin, give them admin page
     if get_admin(user):
         options = {

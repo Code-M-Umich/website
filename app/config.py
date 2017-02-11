@@ -1,4 +1,10 @@
 import os
+import sys
+
+# Overrides user for local development
+USER = ''
+if len(sys.argv) > 1 and sys.argv[1] == '--development':
+    USER = 'devUser'
 
 ENV = os.environ.get('ENVIRONMENT', 'dev')
 #SECRET_KEY = os.environ.get('SECRET_KEY')

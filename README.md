@@ -47,6 +47,6 @@ $ source venv/bin/activate
 ```
 Once in the virutal environment, and root dir of the repo, run this command
 ```
-$ python run.py
+$ python run.py --development
 ```
 Then visit [http://localhost:5000/](http://localhost:5000/) in your browser.
