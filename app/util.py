@@ -5,8 +5,7 @@ import config
 def get_current_user():
     if config.USER is '':
         return request.environ['REMOTE_USER'] #should always be valid with cosign
-    else:
-        return 'devUser'
+    return 'devUser'
 
 
 compliments = [

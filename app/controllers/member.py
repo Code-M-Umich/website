@@ -121,7 +121,7 @@ def get_open_events():
 
 @member.route('/member', methods=['GET', 'POST'])
 def member_route():
-    user = get_current_user()
+    user = util.get_current_user()
     #If the user is an admin, give them admin page
     if get_admin(user):
         options = {
@@ -155,7 +155,7 @@ def member_route():
 
 @member.route('/_member_update_admin', methods=['POST'])
 def update_user_route():
-    user = request.environ['REMOTE_USER'] #should always be valid with cosign
+    user = util.get_current_user()
     if get_admin(user):
         uniqname = str(request.args.get('uniqname'))
         state = str(request.args.get('state'))
