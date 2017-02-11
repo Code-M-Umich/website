@@ -5,33 +5,56 @@
 	
 	{% if users %}
 	<div class="section">
-			<h3>Members</h3> 
-			<table>
-				<tr>
-				    <th>Uniqname</th>
-				    <th>Joined</th> 
-				    <th>Admin</th>
-			    </tr>
-			    {% for user in users %}
-				<tr>
-			    	<td> {{ user.uniqname }} </td>
-			    	<td> {{ user.joined }} </td>
-			    	<td> <input type="checkbox" name="{{ user.uniqname }} checked={{ user.admin}}"/> </td>
-				</tr>
-			    {% endfor %}
-			</table>
+		<h3>Members</h3> 
+		<table>
+			<tr>
+				<th>Uniqname</th>
+				<th>Joined</th> 
+				<th>Admin</th>
+			</tr>
+			{% for user in users %}
+			<tr>
+				<td> {{ user.uniqname }} </td>
+				<td> {{ user.joined }} </td>
+				<td> 
+					<form action='#'>
+						<input 
+						type="checkbox" 
+						name="{{ user.uniqname }}" 
+						{{"checked='checked'" if user.admin == 1 else ''}} 
+						id="{{user.uniqname}}"
+						/> 
+						<label for="{{user.uniqname}}"></label>
+					</form>
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
 	</div>
 	{% endif %}
 
 </div>
-
+{% endblock %}
+{% block js %}
 <script>
-$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+	$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 
+	$(function(){
+//document ready
+var toggle_box = $('.toggle_box');
+console.log("checking admin");
 
-var set_admin = function() {
+});
+
+	var isAdmin = function(adminVal) {
+		console.log(adminVal);
+
+		return adminVal == 1;
+	}
+
+	var set_admin = function() {
 		uniqname= $(this).name
-		state = if(!$(this).is(':checked'));
+		state = !$(this).is(':checked');
 		console.log('/_member_update_admin?uniqname='+uniqname + '&state='+state)
 	//	$.getJSON($SCRIPT_ROOT + '/_member_update_admin?uniqname='+uniqname + '&state='+state, function(data) {
 
@@ -42,9 +65,6 @@ var set_admin = function() {
 
 $('.toggle_box').click( function(){
 	set_admin();
-}
-
-
 });
 
 </script>
