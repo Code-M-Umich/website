@@ -1,5 +1,13 @@
 # For data that would clog up other files
 import random
+import config
+
+def get_current_user():
+    if config.USER is '':
+        return request.environ['REMOTE_USER'] #should always be valid with cosign
+    else:
+        return 'devUser'
+
 
 compliments = [
 "You look wonderful today", 
