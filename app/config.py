@@ -1,10 +1,23 @@
 import os
-import sys
+import argparse
 
-# Overrides user for local development
+
+# Create and handle command line arguments
+parser = argparse.ArgumentParser(description='Website for Code-M')
+parser.add_argument('-d', '--development', 
+					action="store_true", # act like a flag
+                    help='a flag for indicating the app will run for local development')
+parser.add_argument('-u', default='devUser', type=str,
+                    help='uniqname for the session (who you are signed in as)')
+parser.add_argument('-s', '--socket', default=None, type=str,
+                    help='Fix for database not working locally. Provide the filepath given by \
+                    running the command \'mysqladmin | grep socket\'')
+args = parser.parse_args()
+
+# If app is run with development, fake a logged in user
 USER = ''
-if len(sys.argv) > 1 and sys.argv[1] == '--development':
-    USER = 'devUser'
+if args.development and args.u:
+    USER = args.u
 
 ENV = os.environ.get('ENVIRONMENT', 'dev')
 #SECRET_KEY = os.environ.get('SECRET_KEY')
