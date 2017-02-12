@@ -24,7 +24,13 @@ $ source venv/bin/activate
 $ pip install -r requirements.txt 
 ```
 ### Database
-
+[Install mysql]()
+To set up the database and get some intial data, run the following commands
+```bash
+$ mysql -u root -p < sql_startFiles/createDatabase.sql
+$ mysql -u root -p < sql_startFiles/devData.sql
+```
+the root user was used in the example but you can use any user that has access to create databases
 
 ## Work on the Website
 Open an issue on the original Code-M-Umich/webiste repo
@@ -61,8 +67,11 @@ You can visit the site [http://localhost:5000/](http://localhost:5000/) in your 
 ## Troubleshooting
 If you run the app and get the error
 `OperationalError: (2003, "Can't connect to MySQL server on 'localhost' ([Errno 111] Connection refused)")`
+
 Find your mysql socket path by runing the following command
+
 `$ mysqladmin | grep socket`
+
 Take the path from the output and run the app as follows
 ```bash
 $ python run.py --development -s '<path>'

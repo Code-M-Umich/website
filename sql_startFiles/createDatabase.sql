@@ -1,3 +1,9 @@
+DROP DATABASE IF EXISTS codem;
+DROP USER IF EXISTS 'codem'@'localhost';
+CREATE DATABASE codem;
+CREATE USER 'codem'@'localhost' IDENTIFIED BY 'YELLOWSUBMARINE';
+GRANT ALL PRIVILEGES ON codem.* TO 'codem'@'localhost';
+
 USE codem;
 
 DROP TABLE IF EXISTS users, events, attendance;
