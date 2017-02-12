@@ -69,12 +69,13 @@ def add_user(uniqname):
 def get_admin(uniqname):
     isAdmin = True
     conn,cur = openDBConnection()
-    query = "SELECT admin from users " \
-            "WHERE uniqname = \"%s\" LIMIT 1" % uniqname
+    query = "SELECT * from users " \
+            "WHERE uniqname = \"%s\" AND admin=True LIMIT 1" % uniqname
     cur.execute(query)
     entries = cur.fetchone()
     if not entries:
         isAdmin = False
+        print "\n\n\n\eyterterter"
     closeDBConnection(conn,cur)
     return isAdmin
 
