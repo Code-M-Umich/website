@@ -21,6 +21,7 @@ def get_members():
     closeDBConnection(conn,cur)
     return entries
 
+
 # returns all the peope who attended an event 
 def get_event_attendance(eventID):
     cur = openDBConnection()
@@ -30,6 +31,7 @@ def get_event_attendance(eventID):
     closeDBConnection()
     return entries
 
+
 def add_attendence(uniqname, eventID):
     cur = openDBConnection()
     query = "INSERT INTO attendance (uniqname, event) " \
@@ -37,6 +39,7 @@ def add_attendence(uniqname, eventID):
     cur.execute(query)
     DBCommit()
     closeDBConnection()
+
 
 def get_points(uniqname):
     conn, cur = openDBConnection()
@@ -51,28 +54,30 @@ def get_points(uniqname):
     closeDBConnection(conn, cur)
     return points
 
-# Returns true if a given user is an admin
+
+# adds user to database if they don't exist
+def add_user(uniqname):
+    conn,cur = openDBConnection()
+    query = "INSERT IGNORE INTO users (uniqname) " \
+                    "VALUES (\"%s\")" % (uniqname)
+    cur.execute(query)
+    DBCommit(conn)
+    closeDBConnection(conn,cur)
+
+
+# Returns true if a given user is an admin, false if not
 def get_admin(uniqname):
+    isAdmin = True
     conn,cur = openDBConnection()
     query = "SELECT admin from users " \
             "WHERE uniqname = \"%s\" LIMIT 1" % uniqname
     cur.execute(query)
     entries = cur.fetchone()
-    if len(entries):
-        closeDBConnection(conn,cur)
-        #check whether received true or false
+    if not entries:
+        isAdmin = False
+    closeDBConnection(conn,cur)
+    return isAdmin
 
-        return entries[0]
-    else:
-        query = "INSERT INTO users (uniqname) " \
-                "VALUES (\"%s\")" % (uniqname)
-        cur.execute(query)
-        DBCommit(conn)
-        closeDBConnection(conn,cur)
-        #not admin by default
-        return False
-    
-    return True
 
 def set_admin(uniqname, admin):
     conn,cur = openDBConnection()
@@ -85,6 +90,7 @@ def set_admin(uniqname, admin):
     return True
     #not admin by default
     
+
 # Checks to see if the user entered accessCode is correct for a given event
 def validateAttendance(uniqname, userEnteredCode, eventID):
     cur = openDBConnection()
@@ -98,6 +104,7 @@ def validateAttendance(uniqname, userEnteredCode, eventID):
     else:
          return False
 
+
 # returns all the details about an event
 def get_event(eventid):
     conn,cur = openDBConnection()
@@ -106,6 +113,7 @@ def get_event(eventid):
     entry = cur.fetchone()
     closeDBConnection(conn,cur)
     return entry
+
 
 # Returns all the currently open events
 def get_open_events():
@@ -119,6 +127,7 @@ def get_open_events():
     closeDBConnection(conn,cur)
     return entries
 
+
 @member.route('/member', methods=['GET', 'POST'])
 def member_route():
     user = util.get_current_user()
@@ -129,6 +138,7 @@ def member_route():
         }
         return render_template("admin.html", **options)
     else:
+        add_user(user)
         isAuth = False
         didSubmit = False
         
@@ -148,10 +158,11 @@ def member_route():
             'didSubmitCode' : didSubmit,
             'isAuth' : isAuth,
             'points' : get_points(user),
-            'compliment' : randomCompliment()
+            'compliment' : util.randomCompliment()
         } 
 
         return render_template("member.html", **options)
+
 
 @member.route('/_member_update_admin', methods=['POST'])
 def update_user_route():
