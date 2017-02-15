@@ -2,6 +2,7 @@
 {% set PATH_CSS_MAIN = url_for('static', filename='css/main.css') %}
 {% set PATH_LOGO_S = url_for('static', filename='img/logo_small.png') %}
 {% set PATH_JS_JQ = url_for('static', filename='js/jquery.js') %}
+{% set PATH_JS_SORTABLE = url_for('static', filename='js/sorttable.js') %}
 {% set PATH_JS_MAIN = url_for('static', filename='js/main.js') %}
 
 {% set 
@@ -30,6 +31,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
 	<link href="{{ PATH_CSS_MAIN }}" type="text/css" rel="stylesheet" media="screen,projection"/>
 	{% block css %}{% endblock %}
+	<script src="{{ PATH_JS_SORTABLE }}"></script>
 
 </head>
 <body>
