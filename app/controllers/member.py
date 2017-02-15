@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, request
+from flask import render_template, Blueprint, request, jsonify
 from database import openDBConnection, closeDBConnection, DBCommit
 from app import util
 
@@ -15,7 +15,8 @@ def get_members():
         entries.append( 
             {"uniqname": i[0],
              "admin": i[1],
-             "joined": i[2]
+             "joined": i[2],
+             "disabled": i[0]==util.get_current_user() 
             }
         )
     closeDBConnection(conn,cur)
@@ -82,8 +83,8 @@ def get_admin(uniqname):
 
 def set_admin(uniqname, admin):
     conn,cur = openDBConnection()
-    query = "UPDATE users" \
-            "SET admin= %d" \
+    query = "UPDATE users " \
+            "SET admin= %s " \
             "WHERE uniqname='%s'" % (admin, uniqname) 
     cur.execute(query)
     DBCommit(conn)
@@ -165,13 +166,17 @@ def member_route():
         return render_template("member.html", **options)
 
 
-@member.route('/_member_update_admin', methods=['POST'])
+@member.route('/_member_update_admin', methods=['GET'])
 def update_user_route():
     user = util.get_current_user()
-    if get_admin(user):
-        uniqname = str(request.args.get('uniqname'))
-        state = str(request.args.get('state'))
-        return set_admin(uniqname, state)
+    options = {
+            "success": False
+    }
+    uniqname = str(request.args.get('uniqname'))
+    state = str(request.args.get('state')) 
+    if user != uniqname and  get_admin(user):
+        options['success'] = set_admin(uniqname, state)
+    return jsonify( **options )
 
 #make users global, so that when sorting or removing or whatever, you don't
 #have to reload the whole users database again.

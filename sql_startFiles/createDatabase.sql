@@ -1,5 +1,6 @@
 DROP DATABASE IF EXISTS codem;
-DROP USER IF EXISTS 'codem'@'localhost';
+CREATE USER 'codem'@'localhost' IDENTIFIED BY 'YELLOWSUBMARINE';
+DROP USER 'codem'@'localhost';
 CREATE DATABASE codem;
 CREATE USER 'codem'@'localhost' IDENTIFIED BY 'YELLOWSUBMARINE';
 GRANT ALL PRIVILEGES ON codem.* TO 'codem'@'localhost';
