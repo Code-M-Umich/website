@@ -13,11 +13,13 @@
 				<table id="events">
 					<tr>
 						<th>Event Name</th>
+						<th class="sorttable_nosort" >Code</th>
 						<th class="sorttable_nosort" >Open</th> 
 					</tr>
 					{% for event in events %}
 							<tr>
 								<td> {{ event.name }} </td>
+								<td> {{ event.code }} </td>
 								<td> 
 									<form action='#'>
 										<input 

@@ -24,20 +24,20 @@ def get_members():
 
 # returns all the peope who attended an event 
 def get_event_attendance(eventID):
-    cur = openDBConnection()
+    conn, cur = openDBConnection()
     query = "SELECT uniqname FROM codeM.attendance WHERE eventID=\"%d\";" % eventID
     cur.execute(query)
     entries = cur.fetchall()
-    closeDBConnection()
+    closeDBConnection(conn, cur)
     return entries
 
 def add_attendence(uniqname, eventID):
-    cur = openDBConnection()
-    query = "INSERT INTO attendance (uniqname, event) " \
-            "VALUES (\"%s\",\"%d\")" % (uniqname, eventID)
+    conn, cur = openDBConnection()
+    query = "INSERT INTO attendance (uniqname, eventID) " \
+            "VALUES (\"%s\",\"%d\")" % (uniqname, int(eventID))
     cur.execute(query)
-    DBCommit()
-    closeDBConnection()
+    DBCommit(conn)
+    closeDBConnection(conn, cur)
 
 def get_points(uniqname):
     conn, cur = openDBConnection()
@@ -99,24 +99,37 @@ def OpenCloseEvent(eventID, state):
     
 # Checks to see if the user entered accessCode is correct for a given event
 def validateAttendance(uniqname, userEnteredCode, eventID):
-    cur = openDBConnection()
-    query = "SELECT accessCode FROM events WHERE eventID=\"%d\" AND open=1 LIMIT 1" % (eventID)
+    conn,cur = openDBConnection()
+    query = "SELECT accessCode FROM events WHERE eventID=\"%d\" AND open=1 LIMIT 1" % (int(eventID))
     cur.execute(query)
-    accessCode = cur.fetchone()
-    closeDBConnection()
+    accessCode = cur.fetchone()[0]
+    closeDBConnection(conn,cur)
     if userEnteredCode == accessCode:
         add_attendence(uniqname, eventID)
         return True
     else:
-         return False
+        return False
 
 # returns all the details about an event
-def get_event(eventid):
+def get_event(eventID):
     conn,cur = openDBConnection()
-    query = "SELECT * FROM events WHERE eventID=\"%d\";" % (eventID)
+    query = "SELECT * FROM events WHERE eventID=\"%d\";" % (int(eventID))
     cur.execute(query)
     entry = cur.fetchone()
     closeDBConnection(conn,cur)
+    entry = {
+            "id": entry[0],
+            "name": entry[1],
+            "host": entry[2],
+            "datetime": entry[3],
+            "location": entry[4],
+            "description": entry[5],
+            "accessCode": entry[6],
+            "open": entry[7],
+            "points": entry[8],
+            "semester": entry[9],
+            "lastUpdates": entry[10],
+    }
     return entry
 
 # Returns all the events
@@ -125,16 +138,17 @@ def get_events(all):
     entries = []
     conn,cur = openDBConnection()
     if all:
-        query = "SELECT eventID, name, open FROM events"
+        query = "SELECT eventID, name, open, accessCode FROM events"
     else:
-        query = "SELECT eventID, name, open FROM events WHERE open=1"
+        query = "SELECT eventID, name, open, accessCode FROM events WHERE open=1"
     cur.execute(query)
     results = cur.fetchall()
     for i in results:
         entries.append( {
             "id": i[0],
             "name": i[1],
-            "open": i[2]
+            "open": i[2],
+            "code": i[3]
         })
     closeDBConnection(conn,cur)
     return entries
@@ -154,6 +168,15 @@ def member_route():
         add_user(user)
         isAuth = False
         didSubmit = False
+
+        options = {
+            'user' : user,
+            'events' : get_events(False),
+            'didSubmitCode' : didSubmit,
+            'isAuth' : isAuth,
+            'points' : get_points(user),
+            'compliment' : util.randomCompliment()
+        } 
         
         # Handle event code submission
         if request.method == 'POST' and request.form['eventCode']:
@@ -164,15 +187,6 @@ def member_route():
                 isAuth = True
                 event = get_event(eventID)
                 options['authedEventName'] = event['name']
-
-        options = {
-            'user' : user,
-            'events' : get_events(False),
-            'didSubmitCode' : didSubmit,
-            'isAuth' : isAuth,
-            'points' : get_points(user),
-            'compliment' : util.randomCompliment()
-        } 
 
         return render_template("member.html", **options)
 
