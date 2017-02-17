@@ -3,19 +3,58 @@
 
 <div class="container">
 	
-	{% if users %}
 	<div class="section">
-		<h5>Members</h5> 
+		<h5>Events</h5> 
+		{% if events %}
 		<ul class="collapsible" data-collapsible="accordion">
 			<li>
-				<div class="collapsible-header">Admin</div> 
+			<div class="collapsible-header">List of Events</div> 
+			<div class="collapsible-body">
+				<table id="events">
+					<tr>
+						<th>Event Name</th>
+						<th class="sorttable_nosort" >Open</th> 
+					</tr>
+					{% for event in events %}
+							<tr>
+								<td> {{ event.name }} </td>
+								<td> 
+									<form action='#'>
+										<input 
+										type="checkbox" 
+										class="updateEventBox"
+										{{"checked='checked'" if event.open == 1 else ''}} 
+										id="{{event.id}}"
+										/> 
+										<label for="{{event.id}}"></label>
+									</form>
+								</td>
+							</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</ul>
+		{% else %}
+			<div> Failed to load events</div>
+		{% endif %}
+
+	</div>
+	
+
+
+	<div class="section">
+		<h5>Users</h5> 
+		{% if users %}
+		<ul class="collapsible" data-collapsible="accordion">
+			<li>
+				<div class="collapsible-header">Admin members</div> 
 				<div class="collapsible-body">
 					<span>
 						<table id="admin">
 							<tr>
 								<th>Uniqname</th>
 								<th>Joined</th> 
-								<th>Admin</th>
+								<th class="sorttable_nosort">Admin</th>
 							</tr>
 							{% for user in users %}
 								{% if user.admin %}
@@ -25,7 +64,8 @@
 										<td> 
 											<form action='#'>
 												<input 
-												type="checkbox" 
+												type="checkbox"
+												class="updateUserBox" 
 												{% if user.disabled %}
 													disabled
 												{% endif %}
@@ -44,39 +84,44 @@
 			</li>
 
 			<li>
-			<div class="collapsible-header">Non-Admin</div> 
-			<div class="collapsible-body">
-				<table id="nonadmin">
-					<tr>
-						<th>Uniqname</th>
-						<th>Joined</th> 
-						<th>Admin</th>
-					</tr>
-					{% for user in users %}
-						{% if not user.admin %}
+				<div class="collapsible-header">Non-Admin members</div> 
+					<div class="collapsible-body">
+						<table id="nonadmin">
 							<tr>
-								<td> {{ user.uniqname }} </td>
-								<td> {{ user.joined }} </td>
-								<td> 
-									<form action='#'>
-										<input 
-										type="checkbox" 
-										{% if user.disabled %}
-											disabled
-										{% endif %}
-										{{"checked='checked'" if user.admin == 1 else ''}} 
-										id="{{user.uniqname}}"
-										/> 
-										<label for="{{user.uniqname}}"></label>
-									</form>
-								</td>
+								<th>Uniqname</th>
+								<th>Joined</th> 
+								<th class="sorttable_nosort" >Admin</th>
 							</tr>
-						{% endif %}
-					{% endfor %}
-				</table>
-			</div>
+							{% for user in users %}
+								{% if not user.admin %}
+									<tr>
+										<td> {{ user.uniqname }} </td>
+										<td> {{ user.joined }} </td>
+										<td> 
+											<form action='#'>
+												<input 
+												type="checkbox"
+												class="updateUserBox" 
+												{% if user.disabled %}
+													disabled
+												{% endif %}
+												{{"checked='checked'" if user.admin == 1 else ''}} 
+												id="{{user.uniqname}}"
+												/> 
+												<label for="{{user.uniqname}}"></label>
+											</form>
+										</td>
+									</tr>
+								{% endif %}
+							{% endfor %}
+						</table>
+				</div>
+			</li>
+		</ul>
+		{% else %}
+			<div> Failed to load members</div>
+		{% endif %}
 	</div>
-	{% endif %}
 
 </div>
 {% endblock %}
@@ -86,17 +131,40 @@
 
 	$(document).ready(function(){
 
-		var newTableObject = document.getElementById("nonadmin"); 
-		sorttable.makeSortable(newTableObject);
+		//document ready
+
+		//make tables sortable
+		var tableObject = document.getElementById("nonadmin"); 
+		sorttable.makeSortable(tableObject);
+		tableObject = document.getElementById("admin"); 
+		sorttable.makeSortable(tableObject);
+		tableObject = document.getElementById("events"); 
+		sorttable.makeSortable(tableObject);
+		//initiate collapsible
 	    $('.collapsible').collapsible();
 
-		//document ready
-		var toggle_box = $('input:checkbox');
-		$('input:checkbox').change( function(){
+	    //add event for someone clicking an update box button
+		$('.updateUserBox').change( function(){
 			uniqname= $(this).attr('id');
 			state = $(this).is(':checked');
 			URL = $SCRIPT_ROOT + '/_member_update_admin?uniqname='+uniqname + '&state='+state;
-			$.getJSON($SCRIPT_ROOT + '/_member_update_admin?uniqname='+uniqname + '&state='+state, function(data) {
+			$.getJSON(URL, function(data) {
+				if(data["success"]){
+					console.log("successfully changed");
+				}else{
+					$(this).prop('checked', !state);
+					console.log("unsuccessfully changed");
+				}
+			});
+		});
+
+		//add event for someone clicking an event open/close box button
+		$('.updateEventBox').change( function(){
+			eventID= $(this).attr('id');
+			state = $(this).is(':checked');
+			URL = $SCRIPT_ROOT + '/_open_close_event?eventID='+eventID + '&state='+state;
+			console.log(URL)
+			$.getJSON(URL, function(data) {
 				if(data["success"]){
 					console.log("successfully changed");
 				}else{

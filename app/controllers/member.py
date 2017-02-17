@@ -22,7 +22,6 @@ def get_members():
     closeDBConnection(conn,cur)
     return entries
 
-
 # returns all the peope who attended an event 
 def get_event_attendance(eventID):
     cur = openDBConnection()
@@ -32,7 +31,6 @@ def get_event_attendance(eventID):
     closeDBConnection()
     return entries
 
-
 def add_attendence(uniqname, eventID):
     cur = openDBConnection()
     query = "INSERT INTO attendance (uniqname, event) " \
@@ -40,7 +38,6 @@ def add_attendence(uniqname, eventID):
     cur.execute(query)
     DBCommit()
     closeDBConnection()
-
 
 def get_points(uniqname):
     conn, cur = openDBConnection()
@@ -55,7 +52,6 @@ def get_points(uniqname):
     closeDBConnection(conn, cur)
     return points
 
-
 # adds user to database if they don't exist
 def add_user(uniqname):
     conn,cur = openDBConnection()
@@ -64,7 +60,6 @@ def add_user(uniqname):
     cur.execute(query)
     DBCommit(conn)
     closeDBConnection(conn,cur)
-
 
 # Returns true if a given user is an admin, false if not
 def get_admin(uniqname):
@@ -80,7 +75,6 @@ def get_admin(uniqname):
     closeDBConnection(conn,cur)
     return isAdmin
 
-
 def set_admin(uniqname, admin):
     conn,cur = openDBConnection()
     query = "UPDATE users " \
@@ -91,8 +85,18 @@ def set_admin(uniqname, admin):
     closeDBConnection(conn,cur)
     return True
     #not admin by default
-    
 
+def OpenCloseEvent(eventID, state):
+    conn,cur = openDBConnection()
+    query = "UPDATE events " \
+            "SET open= %s " \
+            "WHERE eventID='%s'" % (state, eventID) 
+    cur.execute(query)
+    DBCommit(conn)
+    closeDBConnection(conn,cur)
+    return True
+    #not admin by default
+    
 # Checks to see if the user entered accessCode is correct for a given event
 def validateAttendance(uniqname, userEnteredCode, eventID):
     cur = openDBConnection()
@@ -106,7 +110,6 @@ def validateAttendance(uniqname, userEnteredCode, eventID):
     else:
          return False
 
-
 # returns all the details about an event
 def get_event(eventid):
     conn,cur = openDBConnection()
@@ -116,16 +119,23 @@ def get_event(eventid):
     closeDBConnection(conn,cur)
     return entry
 
-
-# Returns all the currently open events
-def get_open_events():
+# Returns all the events
+# if all is False, then it just get's open events
+def get_events(all):
     entries = []
     conn,cur = openDBConnection()
-    query = "SELECT eventID, name FROM events WHERE open=1"
+    if all:
+        query = "SELECT eventID, name, open FROM events"
+    else:
+        query = "SELECT eventID, name, open FROM events WHERE open=1"
     cur.execute(query)
     results = cur.fetchall()
     for i in results:
-        entries.append( [i[0],i[1]] )
+        entries.append( {
+            "id": i[0],
+            "name": i[1],
+            "open": i[2]
+        })
     closeDBConnection(conn,cur)
     return entries
 
@@ -136,7 +146,8 @@ def member_route():
     #If the user is an admin, give them admin page
     if get_admin(user):
         options = {
-            'users' : get_members()
+            'users' : get_members(),
+            'events' : get_events(True)
         }
         return render_template("admin.html", **options)
     else:
@@ -156,7 +167,7 @@ def member_route():
 
         options = {
             'user' : user,
-            'events' : get_open_events(),
+            'events' : get_events(False),
             'didSubmitCode' : didSubmit,
             'isAuth' : isAuth,
             'points' : get_points(user),
@@ -178,5 +189,18 @@ def update_user_route():
         options['success'] = set_admin(uniqname, state)
     return jsonify( **options )
 
+@member.route('/_open_close_event', methods=['GET'])
+def update_event_route():
+    user = util.get_current_user()
+    options = {
+            "success": False
+    }
+    eventID = int(request.args.get('eventID'))
+    state = str(request.args.get('state')) 
+    if get_admin(user):
+        options['success'] = OpenCloseEvent(eventID, state)
+    return jsonify( **options )
+
 #make users global, so that when sorting or removing or whatever, you don't
 #have to reload the whole users database again.
+
