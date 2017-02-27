@@ -4,6 +4,29 @@ from app import util
 
 member = Blueprint('member', __name__, template_folder='views')
 
+tiers = [
+    {
+        "name" : "tier1",
+        "rewards" : ["Free Movie Tickets", "Water Bottle"],
+        "pointReq" : 20
+    },
+    {
+        "name" : "tier2",
+        "rewards" : ["Resume Book Access", "Exclusive Corporate Events", "T-shirt"],
+        "pointReq" : 12
+    },
+    {
+        "name" : "tier3",
+        "rewards" : ["Drawstring Bag", "Company Swag", "Member-only Social Events"],
+        "pointReq" : 6
+    },
+    {
+        "name" : "tier4",
+        "rewards" : ["Code-M Sticker", "Slack Access", "Piazza Access"],
+        "pointReq" : 2
+    }
+]
+
 
 def get_members():
     conn,cur = openDBConnection()
@@ -55,19 +78,10 @@ def get_points(uniqname):
     return points
 
 def get_awards(points):
-    tier4 = ["Code-M Sticker", "Slack Access", "Piazza Access"]
-    tier3 = ["Drawstring Bag", "Company Swag", "Member-only Social Events"]
-    tier2 = ["Resume Book Access", "Exclusive Corporate Events", "T-shirt"]
-    tier1 = ["Free Movie Tickets", "Water Bottle"]
     toReturn = []
-    if points >= 2:
-        toReturn += tier4
-    if points >= 6:
-        toReturn += tier3
-    if points >= 12:
-        toReturn += tier2
-    if points >= 20:
-        toReturn += tier1
+    for t in tiers:
+        if t['pointReq'] <= points:
+            toReturn += t['rewards']
     return toReturn
 
 # adds user to database if they don't exist
