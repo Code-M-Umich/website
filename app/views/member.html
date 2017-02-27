@@ -23,7 +23,28 @@
         <div id="status" class="left-align">
             <h5>Hello {{ user }}</h5>
             {{  compliment }} and<br>
-            You have earned <b>{{ points }}</b> points.
+            You have earned <b>{{ points }}</b> points.<br>
+            Click <a href="#pointsModal">here</a> to see what your points get you!
+        </div>
+
+        <div id="pointsModal" class="modal">
+          <div class="modal-content">
+            <h4>{{user}}, you have {{points}} points.</h4>
+            {%if perks %}
+            <p>You qualify for:</p>
+            <ul class="collection">
+            {% for perk in perks %}
+            <li class="collection-item">{{perk}}</li>
+            {% endfor %}
+            </ul>
+            <p>Didn't get any of these things? Email us at <a href="mailto:code-m-board@umich.edu">code-m-board@umich.edu</a> and we'll get it sorted out.
+            {% else %}
+            <p>Unfortunately you need at least <strong>2</strong> points to be eligible for anything. Keep attending events and check back soon! Think this is an error? Email us at <a href="mailto:code-m-board@umich.edu">code-m-board@umich.edu</a> and we'll get it sorted out. </p>
+            {% endif %}
+          </div>
+          <div class="modal-footer">
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Awesome!</a>
+          </div>
         </div>
 
         {% if events %}
@@ -53,4 +74,12 @@
         
     </div> <!-- end .fill -->	
 </div>	
+{% endblock %}
+{% block js %}
+<script>
+ $(document).ready(function(){
+    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+    $('.modal').modal();
+  });
+</script>
 {% endblock %}

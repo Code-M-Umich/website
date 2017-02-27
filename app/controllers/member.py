@@ -52,6 +52,22 @@ def get_points(uniqname):
     closeDBConnection(conn, cur)
     return points
 
+def get_awards(points):
+    tier4 = ["Code-M Sticker", "Slack Access", "Piazza Access"]
+    tier3 = ["Drawstring Bag", "Company Swag", "Member-only Social Events"]
+    tier2 = ["Resume Book Access", "Exclusive Corporate Events", "T-shirt"]
+    tier1 = ["Free Movie Tickets", "Water Bottle"]
+    toReturn = []
+    if points >= 2:
+        toReturn += tier4
+    if points >= 6:
+        toReturn += tier3
+    if points >= 12:
+        toReturn += tier2
+    if points >= 20:
+        toReturn += tier1
+    return toReturn
+
 # adds user to database if they don't exist
 def add_user(uniqname):
     conn,cur = openDBConnection()
@@ -175,7 +191,8 @@ def member_route():
             'didSubmitCode' : didSubmit,
             'isAuth' : isAuth,
             'points' : get_points(user),
-            'compliment' : util.randomCompliment()
+            'compliment' : util.randomCompliment(),
+            'perks' : get_awards(get_points(user))
         } 
         
         # Handle event code submission
