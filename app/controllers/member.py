@@ -32,9 +32,11 @@ def get_event_attendance(eventID):
     return entries
 
 def add_attendence(uniqname, eventID):
+    eventID = int(eventID)
     conn, cur = openDBConnection()
-    query = "INSERT INTO attendance (uniqname, eventID) " \
-            "VALUES (\"%s\",\"%d\")" % (uniqname, int(eventID))
+    query = "INSERT INTO attendance (uniqname, eventID) SELECT '%s', %d FROM DUAL \
+        WHERE NOT EXISTS (SELECT * FROM attendance WHERE uniqname='%s' \
+        AND eventID=%d) LIMIT 1" % (uniqname, eventID, uniqname, eventID)
     cur.execute(query)
     DBCommit(conn)
     closeDBConnection(conn, cur)
