@@ -5,6 +5,33 @@ Still in development. Visit our production site [here](https://web.eecs.umich.ed
 
 # Contribute
 
+## Quick Start
+
+Ubuntu
+```
+# install packages
+sudo apt-get install git python2.7 python-pip mysql-server
+sudo pip install virtualenv
+
+# get repository (replace clone url with your fork)
+git clone https://github.com/Code-M-Umich/website.git 
+mv website/ codem_website/ && cd codem_website
+
+# setup database
+mysql -u root -p < sql_startFiles/createDatabase.sql
+mysql -u root -p < sql_startFiles/devData.sql
+
+# setup python virtual environment
+virtualenv venv
+source venv/vin/activate
+pip install -r requirements.txt
+
+# run website
+python run.py --development
+```
+
+More detailed instructions are below.
+
 ## Getting Started
 
 ### Git
